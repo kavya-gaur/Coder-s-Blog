@@ -5,6 +5,7 @@ import { IArticle, ICategory, ICollectionResponse } from "@/types";
 import { AxiosResponse } from "axios";
 import { GetServerSideProps, NextPage } from "next";
 import Tabs from "@/components/Tabs";
+import ArticleList from "@/components/ArticleList";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,13 +21,16 @@ const Home: NextPage = ({ categories, articles }: IPropTypes) => {
   return (
     <>
       <Tabs categories={categories.items} />
-
-      {/* Articles  */}
+      <ArticleList articles={articles.items} />
     </>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
+  const options = {
+    populate: ["author.avatar"],
+    sort: ["id:desc "],
+  };
   const { data: articles }: AxiosResponse<ICollectionResponse<IArticle[]>> =
     await fetchArticles();
   const { data: categories }: AxiosResponse<ICollectionResponse<ICategory[]>> =
