@@ -6,7 +6,7 @@ import { AxiosResponse } from "axios";
 import { GetServerSideProps, NextPage } from "next";
 import Tabs from "@/components/Tabs";
 import ArticleList from "@/components/ArticleList";
-
+import qs from "qs";
 const inter = Inter({ subsets: ["latin"] });
 
 interface IPropTypes {
@@ -31,12 +31,13 @@ export const getServerSideProps: GetServerSideProps = async () => {
     populate: ["author.avatar"],
     sort: ["id:desc "],
   };
+
+  const queryString = qs.stringify(options);
   const { data: articles }: AxiosResponse<ICollectionResponse<IArticle[]>> =
-    await fetchArticles();
+    await fetchArticles(queryString);
   const { data: categories }: AxiosResponse<ICollectionResponse<ICategory[]>> =
     await fetchCategories();
 
-  //categories
   return {
     props: {
       categories: {
