@@ -63,3 +63,5 @@ export interface IArticleAttribute {
   createdAt: string;
   author: IAuthor;
 }
+
+export type TDirection = 1 | -1;

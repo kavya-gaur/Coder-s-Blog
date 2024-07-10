@@ -5,3 +5,9 @@
 .container {
   padding: 0 2rem;
 }
+
+@layer components {
+  .disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+}

@@ -22,7 +22,7 @@ const Tabs = ({ categories, handleOnSearch }: IPropType) => {
             "mr-6 pb-6 border-b-4 rounded-sm " +
             `${
               router.pathname === "/"
-                ? "border-primary text-primary"
+                ? "border-blue-500 text-blue-500"
                 : "border-white text-gray-400"
             }`
           }
@@ -37,7 +37,7 @@ const Tabs = ({ categories, handleOnSearch }: IPropType) => {
                 "mr-6 pb-6 border-b-4 rounded-sm " +
                 `${
                   isActiveLink(category)
-                    ? "border-primary text-primary"
+                    ? "border-blue-500 text-blue-500"
                     : "border-white text-gray-400"
                 }`
               }
