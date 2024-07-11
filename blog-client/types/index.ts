@@ -9,7 +9,7 @@ export interface ICategory {
 
 export interface ICategoryAttribute {
   Title: string;
-  slug: string;
+  Slug: string;
 }
 export interface IResourceMeta {
   pagination: IPagination;
@@ -65,3 +65,13 @@ export interface IArticleAttribute {
 }
 
 export type TDirection = 1 | -1;
+
+export interface IQueryOptions {
+  filters?: any;
+  sort: any;
+  populate: any;
+  pagination: {
+    page: number;
+    pageSize: number;
+  };
+}

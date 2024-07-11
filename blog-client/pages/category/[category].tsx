@@ -1,5 +1,11 @@
 import { fetchArticles, fetchCategories } from "@/http";
-import { IArticle, ICategory, ICollectionResponse } from "@/types";
+import {
+  IArticle,
+  ICategory,
+  ICollectionResponse,
+  IPagination,
+  IQueryOptions,
+} from "@/types";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import React from "react";
@@ -7,7 +13,7 @@ import { AxiosResponse } from "axios";
 import Tabs from "@/components/Tabs";
 import qs from "qs";
 import ArticleList from "@/components/ArticleList";
-import { capitalizeFirstLetter, makeCategory } from "@/utils";
+import { capitalizeFirstLetter, debounce, makeCategory } from "@/utils";
 import Pagination from "@/components/Pagination";
 import { useRouter } from "next/router";
 interface IPropType {
@@ -30,6 +36,10 @@ const category = ({ categories, articles, slug }: IPropType) => {
   const router = useRouter();
   const { category: categorySlug } = router.query;
 
+  const handleSearch = (query: string) => {
+    router.push(`/category/${categorySlug}/?search=${query}`);
+    return;
+  };
   return (
     <>
       <Head>
@@ -39,7 +49,7 @@ const category = ({ categories, articles, slug }: IPropType) => {
       </Head>
       <Tabs
         categories={categories.items}
-        // handleOnSearch={debounce(handleSearch, 500)}
+        handleOnSearch={debounce(handleSearch, 500)}
       />
       <ArticleList articles={articles.items} />
       <Pagination
@@ -52,7 +62,9 @@ const category = ({ categories, articles, slug }: IPropType) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const options = {
+  console.log("doing api call....");
+
+  const options: IQueryOptions = {
     populate: ["author.avatar"],
     sort: ["id:desc"],
     filters: {
@@ -61,10 +73,18 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       },
     },
     pagination: {
-      page: query.page ? query.page : 1,
+      page: query.page ? +query.page : 1,
       pageSize: 1,
     },
   };
+
+  if (query.search) {
+    options.filters = {
+      Title: {
+        $containsi: query.search,
+      },
+    };
+  }
 
   const queryString = qs.stringify(options);
 

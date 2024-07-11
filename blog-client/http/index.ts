@@ -22,3 +22,6 @@ export const fetchArticles = async (queryString: string) => {
 
   return api.get(`/api/articles?${queryString}`);
 };
+
+export const fetchArticleBySlug = (queryString: string) =>
+  api.get(`/api/articles?${queryString}`);
